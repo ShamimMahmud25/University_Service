@@ -15,11 +15,14 @@ mongoose.connect("mongodb://localhost/university", {
 const ObjectId = Schema.ObjectId;
 
 const userSchema = new Schema({
-  fullName: String,
   email: String,
-  phoneNumber: String,
   password: String,
-  image: String
+  firstName:String,
+  lastName:String,
+  address:String,
+  mobile:String,
+  session:String,
+  studentID:String
 });
 const UserModel = mongoose.model("Users", userSchema);
 
@@ -52,28 +55,6 @@ exports.checkMailId = (emailInfo) => {
 
 exports.checkDetails = (_id, email) => {
   return UserModel.findOne({ _id, email });
-};
-
-//User password Updated
-
-exports.updatePassword = (userid, password) => {
-  return UserModel.findOneAndUpdate({ _id: userid, password });
-};
-exports.updateUser = (userId, newEmail) => {
-  return UserModel.findOneAndUpdate(
-    { _id: userId },
-    { email: newEmail },
-    { new: true }
-  );
-};
-
-exports.updateUserInfo = async(userId, userInfo) => {
-    return await UserModel.findOneAndUpdate({_id: userId}, userInfo);
-}
-
-//finding user details for order 
-exports.findUser = (userid)=>{
-  return UserModel.findOne({_id: userid});
 };
 
 
