@@ -10,7 +10,7 @@ const routers = new Router();
 routers.get("/", health);
 
 routers.post("/signup", userController.register);
-
+routers.post("/email/validate",userController.emailExist);
 routers.post("/login", userController.login);
 
 module.exports = routers;

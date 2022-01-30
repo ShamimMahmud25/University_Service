@@ -37,7 +37,7 @@ exports.register = async (ctx) => {
         if (hasDuplicate) {
             throw {
                 status: 400,
-                message: "Email address already registered"
+                message:"Email address already registered"
             };
         }
         await userModel.create(request);
@@ -77,10 +77,20 @@ exports.login = async (ctx) => {
             password:userInfo.password,
             email:userInfo.email
         }
+        const Data={
+            firstName:userInfo.firstName,
+            lastName:userInfo.lastName,
+            address:userInfo.address,
+            mobile:userInfo.mobile,
+            session:userInfo.session,
+            studentID:userInfo.studentID,
+            email:userInfo.email
+        }
         const token = jwt.sign({userObject}, variables.secret);
         ctx.body = {
             message: "login Successful",
-            token
+            token,
+            Data
 
         };
         // console.log(isMatch);
@@ -92,3 +102,23 @@ exports.login = async (ctx) => {
     }
 };
 
+exports.emailExist = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        const hasDuplicate = await userModel.checkDuplicacy(request.email);
+        console.log(request.email);
+        if (hasDuplicate) {
+            throw {
+                status: 400,
+                message:"Email address already registered"
+            };
+        }
+        ctx.body = {
+            message: "Email does not exist"
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status;
+        ctx.body = { message, error };
+    }
+};
