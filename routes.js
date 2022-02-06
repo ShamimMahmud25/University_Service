@@ -12,6 +12,7 @@ routers.get("/", health);
 routers.post("/signup", userController.register);
 routers.post("/email/validate",userController.emailExist);
 routers.post("/login", userController.login);
+routers.post("/user", userController.findUserDetails);
 
 module.exports = routers;
 

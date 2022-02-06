@@ -77,20 +77,10 @@ exports.login = async (ctx) => {
             password:userInfo.password,
             email:userInfo.email
         }
-        const Data={
-            firstName:userInfo.firstName,
-            lastName:userInfo.lastName,
-            address:userInfo.address,
-            mobile:userInfo.mobile,
-            session:userInfo.session,
-            studentID:userInfo.studentID,
-            email:userInfo.email
-        }
         const token = jwt.sign({userObject}, variables.secret);
         ctx.body = {
             message: "login Successful",
-            token,
-            Data
+            token
 
         };
         // console.log(isMatch);
@@ -106,7 +96,6 @@ exports.emailExist = async (ctx) => {
     try {
         const request = ctx.request.body;
         const hasDuplicate = await userModel.checkDuplicacy(request.email);
-        console.log(request.email);
         if (hasDuplicate) {
             throw {
                 status: 400,
@@ -115,6 +104,35 @@ exports.emailExist = async (ctx) => {
         }
         ctx.body = {
             message: "Email does not exist"
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status;
+        ctx.body = { message, error };
+    }
+};
+exports.findUserDetails = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        const userInfo = await userModel.checkDuplicacy(request.email);
+        if (!userInfo) {
+            throw {
+                status: 400,
+                message:"User details fetch fail"
+            };
+        }
+        const data={
+            firstName:userInfo.firstName,
+            lastName:userInfo.lastName,
+            address:userInfo.address,
+            mobile:userInfo.mobile,
+            session:userInfo.session,
+            studentID:userInfo.studentID,
+            email:userInfo.email
+        }
+        ctx.body = {
+            message: "User Details Get Successfully",
+            data
         };
     } catch (e) {
         const { status, message, error } = e;
