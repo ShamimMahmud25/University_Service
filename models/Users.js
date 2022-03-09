@@ -22,7 +22,8 @@ const userSchema = new Schema({
   address:String,
   mobile:String,
   session:String,
-  studentID:String
+  studentID:String,
+  isEmailVarified:Boolean
 });
 const UserModel = mongoose.model("Users", userSchema);
 
@@ -56,5 +57,14 @@ exports.checkMailId = (emailInfo) => {
 exports.checkDetails = (_id, email) => {
   return UserModel.findOne({ _id, email });
 };
+
+exports.updatePassword= (password, email) => {
+  password = md5(password);
+  return  UserModel.findOneAndUpdate({email,password,new:true});
+};
+exports.validateEmail= (info) => {
+  return  UserModel.findOneAndUpdate({email:info.email,isEmailVarified:info.isEmailVarified,new:true
+});
+}
 
 

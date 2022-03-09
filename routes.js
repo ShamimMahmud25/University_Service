@@ -13,6 +13,9 @@ routers.post("/signup", userController.register);
 routers.post("/email/validate",userController.emailExist);
 routers.post("/login", userController.login);
 routers.post("/user", userController.findUserDetails);
+routers.post("/forgetPassword", userController.forgetPassword);
+routers.post("/resetPassword", userController.resetPassword);
+routers.post("/emailVerificationInfo", userController.updateEmailVerificationInfo);
 
 module.exports = routers;
 

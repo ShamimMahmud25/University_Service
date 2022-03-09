@@ -15,11 +15,12 @@
     "koa2-cors": "^2.0.6",
     "md5": "^2.3.0",
     "mongoose": "^5.12.15",
+    "nodemon": "^2.0.15",
     "useragent": "^2.2.1",
     "uuid": "^3.2.1",
     "validatorjs": "^3.22.1"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   }
 }
