@@ -13,7 +13,7 @@ const registerRules = {
     address:"required",
     mobile:"required",
     session:"required",
-    studentID:"required"
+    isEmailVarified:"required"
 };
 
 const loginRules = {
@@ -25,19 +25,28 @@ const loginRules = {
 exports.register = async (ctx) => {
     try {
         const request = ctx.request.body;
+        request.isEmailVarified=false;
         const validation = new Validator(request, registerRules);
         if (validation.fails()) {
             throw {
                 status: 400,
+                code:1000,
                 message: "Invalid request",
-                error: validation.errors.all()
+                error:{
+                    code:1000,
+                    message:validation.errors
+                  }
             };
         }
         const hasDuplicate = await userModel.checkDuplicacy(request.email);
         if (hasDuplicate) {
             throw {
                 status: 400,
-                message: "Email address already registered"
+                message:"Email address already registered",
+                error:{
+                  code:1001,
+                  message:"Email address already registered"
+                }
             };
         }
         await userModel.create(request);
@@ -47,6 +56,7 @@ exports.register = async (ctx) => {
         };
     } catch (e) {
         const { status, message, error } = e;
+        console.log(error);
         ctx.status = status;
         ctx.body = { message, error };
     }
@@ -92,3 +102,120 @@ exports.login = async (ctx) => {
     }
 };
 
+exports.emailExist = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        const hasDuplicate = await userModel.checkDuplicacy(request.email);
+        if (hasDuplicate) {
+            throw {
+                status: 400,
+                message:"Email address already registered",
+                error:{
+                    code:1001,
+                    message:"Email address already registered"
+                  }
+            };
+        }
+        ctx.body = {
+            message: "Email does not exist"
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status;
+        ctx.body = { message, error };
+    }
+};
+exports.findUserDetails = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        const userInfo = await userModel.checkDuplicacy(request.email);
+        if (!userInfo) {
+            throw {
+                status: 400,
+                message:"User details fetch fail"
+            };
+        }
+        const data={
+            firstName:userInfo.firstName,
+            lastName:userInfo.lastName,
+            address:userInfo.address,
+            mobile:userInfo.mobile,
+            session:userInfo.session,
+            studentID:userInfo.studentID,
+            email:userInfo.email,
+            isEmailVarified:userInfo.isEmailVarified
+        }
+        console.log(data);
+        ctx.body = {
+            message: "User Details Get Successfully",
+            data
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status;
+        ctx.body = { message, error };
+    }
+};
+exports.forgetPassword = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        const userInfo = await userModel.checkDuplicacy(request.email);
+        if (!userInfo) {
+            throw {
+                status: 400,
+                message:"Password set fail"
+            };
+        }
+        await userModel.updatePassword(request.password,request.email);
+      
+        ctx.body = {
+            message: "Password has changed Successfully",
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status || 400;
+        ctx.body = { message, error };
+    }
+};
+exports.resetPassword = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        const isMatch = await userModel.checkExistence(request.email, request.password);
+        if (!isMatch) {
+            throw {
+                status: 400,
+                message: "Password is not valid"
+            };
+        }
+        await userModel.updatePassword(request.newPassword,request.email);
+      
+        ctx.body = {
+            message: "Password has reset Successfully",
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status || 400;
+        ctx.body = { message, error };
+    }
+};
+exports.updateEmailVerificationInfo = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        const userInfo = await userModel.checkDuplicacy(request.email);
+        if (!userInfo) {
+            throw {
+                status: 400,
+                message:"Fail to verify User Email"
+            };
+        }
+        await userModel.validateEmail({email:request.email,isEmailVarified:true});
+      
+        ctx.body = {
+            message: "User Email Varified Successfully",
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status || 400;
+        ctx.body = { message, error };
+    }
+};
