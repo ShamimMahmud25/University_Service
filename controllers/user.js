@@ -4,6 +4,8 @@ const Validator = require("validatorjs");
 const userModel = require("../models/Users");
 const variables = require("../variables/index");
 const jwt = require('jsonwebtoken');
+const axios=require('axios');
+const {sendEmail} =require("../models/SendEmail");
 
 const registerRules = {
     email: "required|email",
@@ -145,7 +147,7 @@ exports.findUserDetails = async (ctx) => {
             email:userInfo.email,
             isEmailVarified:userInfo.isEmailVarified
         }
-        console.log(data);
+        //console.log(data);
         ctx.body = {
             message: "User Details Get Successfully",
             data
@@ -212,6 +214,40 @@ exports.updateEmailVerificationInfo = async (ctx) => {
       
         ctx.body = {
             message: "User Email Varified Successfully",
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status || 400;
+        ctx.body = { message, error };
+    }
+};
+exports.SendMail = async (ctx) => {
+    try {
+        const request = ctx.request.body;
+        let userInfo;
+        if(request.session=="ALL"){
+             userInfo = await userModel.getAllUser();
+        }
+        else{
+             userInfo = await userModel.findUser(request.session);
+        }
+        
+        
+        if (!userInfo) {
+            throw {
+                status: 400,
+                message:"No user found"
+            };
+        }
+        
+         for(let i=0;i<userInfo.length;i++){
+             //console.log(userInfo[i].email);
+             request.email=userInfo[i].email;
+             sendEmail(request);
+           
+         }
+        ctx.body = {
+            message: "Email Send Successfully",
         };
     } catch (e) {
         const { status, message, error } = e;

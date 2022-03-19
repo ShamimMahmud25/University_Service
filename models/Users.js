@@ -66,5 +66,12 @@ exports.validateEmail= (info) => {
   return  UserModel.findOneAndUpdate({email:info.email,isEmailVarified:info.isEmailVarified,new:true
 });
 }
+exports.findUser= (session) => {
+  return  UserModel.find({session});
+}
+exports.getAllUser= (session) => {
+  return  UserModel.find();
+}
+
 
 
