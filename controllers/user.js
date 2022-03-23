@@ -255,3 +255,23 @@ exports.SendMail = async (ctx) => {
         ctx.body = { message, error };
     }
 };
+
+exports.getUsers = async (ctx) => {
+    try {
+        const usersData = await userModel.getAllUser();
+        if (!usersData) {
+            throw {
+                status: 400,
+                message:"No user Found"
+            };
+        }
+        ctx.body = {
+            message: "User Details Get Successfully",
+            data:usersData
+        };
+    } catch (e) {
+        const { status, message, error } = e;
+        ctx.status = status || 400;
+        ctx.body = { message, error };
+    }
+};
