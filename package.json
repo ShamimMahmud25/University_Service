@@ -1,7 +1,7 @@
 {
-  "name": "wallet-service",
+  "name": "university-service",
   "version": "1.0.0",
-  "description": "wallet service",
+  "description": "university service",
   "main": "index.js",
   "license": "ISC",
   "dependencies": {

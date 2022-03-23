@@ -8,6 +8,7 @@ const userController = require("./controllers/user");
 const routers = new Router();
 
 routers.get("/", health);
+ routers.get("/users", userController.getUsers);
 
 routers.post("/signup", userController.register);
 routers.post("/email/validate",userController.emailExist);
