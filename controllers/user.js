@@ -58,7 +58,6 @@ exports.register = async (ctx) => {
         };
     } catch (e) {
         const { status, message, error } = e;
-        console.log(error);
         ctx.status = status;
         ctx.body = { message, error };
     }
@@ -95,10 +94,8 @@ exports.login = async (ctx) => {
             token
 
         };
-        // console.log(isMatch);
     } catch (e) {
         const { status, message, error } = e;
-        //console.log(e);
         ctx.status = status;
         ctx.body = { message, error };
     }
@@ -147,7 +144,6 @@ exports.findUserDetails = async (ctx) => {
             email:userInfo.email,
             isEmailVarified:userInfo.isEmailVarified
         }
-        //console.log(data);
         ctx.body = {
             message: "User Details Get Successfully",
             data
@@ -241,7 +237,6 @@ exports.SendMail = async (ctx) => {
         }
         
          for(let i=0;i<userInfo.length;i++){
-             //console.log(userInfo[i].email);
              request.email=userInfo[i].email;
              sendEmail(request);
            
