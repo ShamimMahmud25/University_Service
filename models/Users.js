@@ -31,14 +31,11 @@ exports.checkDuplicacy = (email) => {
   return UserModel.findOne({ email });
 };
 exports.checkExistence = (email, password) => {
-  //console.log((1));
-
   return UserModel.findOne({ email, password: md5(password) });
 };
 
 exports.create = (userInfo) => {
   userInfo.password = md5(userInfo.password);
-  //console.log(userInfo);
   return UserModel.create(userInfo);
 };
 
