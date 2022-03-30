@@ -11,9 +11,7 @@ const registerRules = {
     email: "required|email",
     password: "required|min:8",
     firstName:"required",
-    lastName:"required",
     address:"required",
-    mobile:"required",
     session:"required",
     isEmailVarified:"required"
 };
