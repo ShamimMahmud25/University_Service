@@ -45,8 +45,8 @@ exports.create = async (ctx) => {
 
 exports.getJobInfo = async (ctx) => {
     try {
-        const usersData = await jobModel.getAllUserJobInfo();
-        if (!usersData) {
+        const usersJobData = await jobModel.getAllUserJobInfo();
+        if (!usersJobData) {
             throw {
                 status: 400,
                 message:"No Information Found"
@@ -54,7 +54,7 @@ exports.getJobInfo = async (ctx) => {
         }
         ctx.body = {
             message: "Job Details Get Successfully",
-            data:usersData
+            data:usersJobData
         };
     } catch (e) {
         const { status, message, error } = e;
