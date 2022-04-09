@@ -12,8 +12,8 @@ const registerRules = {
     password: "required|min:8",
     firstName:"required",
     address:"required",
-    session:"required",
-    isEmailVarified:"required"
+    isEmailVarified:"required",
+    userType:"required"
 };
 
 const loginRules = {
@@ -48,6 +48,13 @@ exports.register = async (ctx) => {
                   message:"Email address already registered"
                 }
             };
+        }
+        if(!request.designation){
+            request.designation="N/A";
+        }
+        if(request.userType==="Teacher"){
+            request.session="N/A";
+            request.studentID="N/A"
         }
         await userModel.create(request);
 
@@ -140,7 +147,8 @@ exports.findUserDetails = async (ctx) => {
             session:userInfo.session,
             studentID:userInfo.studentID,
             email:userInfo.email,
-            isEmailVarified:userInfo.isEmailVarified
+            isEmailVarified:userInfo.isEmailVarified,
+            userType: userInfo.userType
         }
         ctx.body = {
             message: "User Details Get Successfully",
@@ -233,7 +241,6 @@ exports.SendMail = async (ctx) => {
                 message:"No user found"
             };
         }
-        
          for(let i=0;i<userInfo.length;i++){
              request.email=userInfo[i].email;
              sendEmail(request);
