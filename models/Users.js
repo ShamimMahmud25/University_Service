@@ -23,7 +23,9 @@ const userSchema = new Schema({
   mobile:String,
   session:String,
   studentID:String,
-  isEmailVarified:Boolean
+  isEmailVarified:Boolean,
+  userType:String,
+  designation: String,
 });
 const UserModel = mongoose.model("Users", userSchema);
 
