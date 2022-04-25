@@ -59,10 +59,10 @@ exports.checkDetails = (_id, email) => {
 
 exports.updatePassword= (password, email) => {
   password = md5(password);
-  return  UserModel.findOneAndUpdate({email,password,new:true});
+  return  UserModel.findOneAndUpdate({email},{password},{new:true});
 };
 exports.validateEmail= (info) => {
-  return  UserModel.findOneAndUpdate({email:info.email,isEmailVarified:info.isEmailVarified,new:true
+  return  UserModel.findOneAndUpdate({email:info.email},{isEmailVarified:info.isEmailVarified},{new:true
 });
 }
 exports.findUser= (session) => {
@@ -71,6 +71,3 @@ exports.findUser= (session) => {
 exports.getAllUser= (session) => {
   return  UserModel.find();
 }
-
-
-

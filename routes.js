@@ -15,10 +15,10 @@ routers.get("/users", userController.getUsers);
 routers.post("/signup", userController.register);
 routers.post("/email/validate", userController.emailExist);
 routers.post("/login", userController.login);
-routers.post("/user", userController.findUserDetails);
-routers.post("/forgetPassword", userController.forgetPassword);
-routers.post("/resetPassword", userController.resetPassword);
-routers.post(
+routers.get("/user/:email", userController.findUserDetails);
+routers.put("/forgetPassword", userController.forgetPassword);
+routers.put("/resetPassword", userController.resetPassword);
+routers.put(
   "/emailVerificationInfo",
   userController.updateEmailVerificationInfo
 );
