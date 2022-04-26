@@ -131,8 +131,8 @@ exports.emailExist = async (ctx) => {
 };
 exports.findUserDetails = async (ctx) => {
     try {
-        const request = ctx.request.body;
-        const userInfo = await userModel.checkDuplicacy(request.email);
+        const {email} = ctx.params;
+        const userInfo = await userModel.checkDuplicacy(email);
         if (!userInfo) {
             throw {
                 status: 400,
@@ -170,8 +170,8 @@ exports.forgetPassword = async (ctx) => {
                 message:"Password set fail"
             };
         }
-        await userModel.updatePassword(request.password,request.email);
       
+        await userModel.updatePassword(request.password,request.email);
         ctx.body = {
             message: "Password has changed Successfully",
         };
